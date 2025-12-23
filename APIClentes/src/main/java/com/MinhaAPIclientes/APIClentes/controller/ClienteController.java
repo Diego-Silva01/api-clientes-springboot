@@ -1,5 +1,6 @@
 package com.MinhaAPIclientes.APIClentes.controller;
 
+import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
 import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
 import com.MinhaAPIclientes.APIClentes.service.ClienteService;
@@ -16,10 +17,15 @@ public class ClienteController {
     public ClienteController(ClienteService service) {
         this.service = service;
     }
-
+// DTO = Data Transfer Object
+//👉 Serve somente para transportar dados
+//👉 Não representa o banco
+//👉 Não tem @Entity
+//👉 É usado para entrada e/ou saída da API
     @PostMapping("")
-    public Cliente salvar(@RequestBody Cliente cliente) {
-        return service.salvar(cliente);
+    public Cliente salvar(@RequestBody ClienteDTO clienteDTO) {
+
+        return service.salvar(clienteDTO);
 
     }
 
@@ -37,10 +43,10 @@ public class ClienteController {
 
     }
     @PutMapping("/{id}")
-    public Cliente atualizarCliente(@PathVariable("id") Long id, @RequestBody Cliente clienteNovo ) {
+    public Cliente atualizarCliente(@PathVariable("id") Long id, @RequestBody ClienteDTO DTO ) {
         Cliente clientedoBanco = service.buscarPorID(id);
-        clientedoBanco.setNome(clienteNovo.getNome());
-        clientedoBanco.setEmail(clienteNovo.getEmail());
+        clientedoBanco.setNome(DTO.getNome());
+        clientedoBanco.setEmail(DTO.getEmail());
         return service.atualizarCliente(id, clientedoBanco);
 
 
