@@ -4,6 +4,7 @@ import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
 import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
 import com.MinhaAPIclientes.APIClentes.service.ClienteService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,43 +24,40 @@ public class ClienteController {
 //👉 Não tem @Entity
 //👉 É usado para entrada e/ou saída da API
     @PostMapping("")
-    public Cliente salvar(@RequestBody ClienteDTO clienteDTO) {
-
-        return service.salvar(clienteDTO);
+    public ResponseEntity<Cliente> salvar(@RequestBody ClienteDTO clienteDTO) {
+        Cliente clienteSalvo = service.salvar(clienteDTO);
+        return ResponseEntity.status(201).body(clienteSalvo);
 
     }
 
     @GetMapping("")
-    public List<Cliente> buscarTodos() {
-        return service.buscarTodos();
+    public ResponseEntity<List<Cliente>> buscarTodos() {
+        List<Cliente> cliente = service.buscarTodos();
+        return ResponseEntity.status(200).body(cliente);
+        //👉 não retorna só dados, retorna dados + status HTTP correto
 
     }
 
     @GetMapping("/{id}")
-    public Cliente buscarporID(@PathVariable("id") Long id) {
+    public ResponseEntity<Cliente> buscarporID(@PathVariable("id") Long id) {
+
         Cliente cliente = service.buscarPorID(id);
-        return cliente;
+        return ResponseEntity.ok(cliente);
 
 
     }
     @PutMapping("/{id}")
-    public Cliente atualizarCliente(@PathVariable("id") Long id, @RequestBody ClienteDTO DTO ) {
-        Cliente clientedoBanco = service.buscarPorID(id);
-        clientedoBanco.setNome(DTO.getNome());
-        clientedoBanco.setEmail(DTO.getEmail());
-        return service.atualizarCliente(id, clientedoBanco);
-
-
+    public ResponseEntity<Cliente> atualizarCliente(@PathVariable("id") Long id, @RequestBody ClienteDTO DTO ) {
+        Cliente clienteAtualizado = service.atualizarCliente(id, DTO);
+        return ResponseEntity.ok(clienteAtualizado);
 
     }
     @DeleteMapping("/{id}")
-    public void deletarUsuario(@PathVariable("id") Long id){
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletarUsuario(id);
-        System.out.println("Deletado");
-
-
-
+        return ResponseEntity.noContent().build();
     }
+
 }
 
 
