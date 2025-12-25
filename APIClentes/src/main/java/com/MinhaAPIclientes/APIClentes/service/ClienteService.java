@@ -22,15 +22,12 @@ public class ClienteService {
         Cliente cliente = new Cliente();
         cliente.setNome(DTO.getNome());
         cliente.setEmail(DTO.getEmail());
-
         return repository.save(cliente);
     }
 
     public List<Cliente> buscarTodos() {
         return repository.findAll();
-
     }
-
 
     public Cliente buscarPorID(Long id) {
         return repository.findById(id)
@@ -48,15 +45,11 @@ public class ClienteService {
         clientedoBanco.setEmail(DTO.getEmail());
         return repository.save(clientedoBanco);
 
-
-
     }
 
     public void deletarUsuario(Long id){
         repository.deleteById(id);
         System.out.println("Deletado");
-
-
 
     }
 }
