@@ -5,30 +5,33 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "cliente")
 public class Cliente {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
-    public int getTelefone() {
-        return telefone;
+    private String telefone;
+
+    private String endereco;
+
+    // Construtor vazio obrigatório
+    public Cliente() {
     }
 
-    public void setTelefone(int telefone) {
-        this.telefone = telefone;
+    // Getters e Setters
+    public Long getId() {
+        return id;
     }
 
-    public String getEndereço() {
-        return endereço;
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    public void setEndereço(String endereço) {
-        this.endereço = endereço;
-    }
-
-    private int telefone;
-    private String endereço;
 
     public String getNome() {
         return nome;
@@ -46,13 +49,19 @@ public class Cliente {
         this.email = email;
     }
 
-    public long getId() {
-        return id;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
+    public String getEndereco() {
+        return endereco;
+    }
 
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 }
