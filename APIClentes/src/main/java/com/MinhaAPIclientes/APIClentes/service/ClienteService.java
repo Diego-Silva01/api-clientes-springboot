@@ -4,9 +4,7 @@ import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
 import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
 import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service

@@ -4,6 +4,7 @@
     import com.MinhaAPIclientes.APIClentes.Model.Cliente;
     import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
     import com.MinhaAPIclientes.APIClentes.service.ClienteService;
+    import jakarta.validation.Valid;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,7 @@
 
         }
         @PutMapping("/{id}")
-        public ResponseEntity<Cliente> atualizarCliente(@PathVariable("id") Long id, @RequestBody ClienteDTO DTO ) {
+        public ResponseEntity<Cliente> atualizarCliente(@PathVariable("id") Long id,@Valid @RequestBody ClienteDTO DTO ) {
             Cliente clienteAtualizado = service.atualizarCliente(id, DTO);
             return ResponseEntity.ok(clienteAtualizado);
 
