@@ -1,51 +1,44 @@
 package com.MinhaAPIclientes.APIClentes.exception;
 
+import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
+import com.MinhaAPIclientes.APIClentes.exception.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // ERRO DE VALIDAÇÃO (@Valid)
+    //  ERRO DE VALIDAÇÃO (@Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationErrors(
+    public ResponseEntity<ValidationErrorResponse> handleValidacao(
             MethodArgumentNotValidException ex) {
 
-        List<ValidationError> erros = new ArrayList<>();
+        ValidationErrorResponse erro =
+                new ValidationErrorResponse(HttpStatus.BAD_REQUEST.value());
 
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            erros.add(new ValidationError(
-                    error.getField(),
-                    error.getDefaultMessage()
-            ));
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            erro.adicionarErro(
+                    fieldError.getField(),
+                    fieldError.getDefaultMessage()
+            );
         });
 
-        ErrorResponse response = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Erro de validação",
-                erros
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
-
 
     @ExceptionHandler(ClienteNaoEncontradoException.class)
     public ResponseEntity<ErrorResponse> handleClienteNaoEncontrado(
             ClienteNaoEncontradoException ex) {
 
-        ErrorResponse response = new ErrorResponse(
+        ErrorResponse erro = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                null
+                ex.getMessage()
         );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
+
 }
