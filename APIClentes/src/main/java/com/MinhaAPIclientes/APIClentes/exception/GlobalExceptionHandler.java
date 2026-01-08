@@ -1,6 +1,4 @@
 package com.MinhaAPIclientes.APIClentes.exception;
-
-import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
 import com.MinhaAPIclientes.APIClentes.exception.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +38,20 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    public ResponseEntity<ErrorResponse> handlerEmailJaCadastrado(EmailJaCadastradoException ex){
+
+        ErrorResponse erro = new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+    @ExceptionHandler(NumeroDeTelefoneJaCadastrado.class)
+    public ResponseEntity<ErrorResponse> handleTelefoneJaCadastrado(
+            NumeroDeTelefoneJaCadastrado ex){
+        ErrorResponse erro = new ErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+
+    }
+
+
 
 }

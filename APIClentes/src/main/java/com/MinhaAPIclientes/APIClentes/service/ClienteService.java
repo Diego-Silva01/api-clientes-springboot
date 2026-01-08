@@ -4,6 +4,8 @@ import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
 import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
 import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
+import com.MinhaAPIclientes.APIClentes.exception.EmailJaCadastradoException;
+import com.MinhaAPIclientes.APIClentes.exception.NumeroDeTelefoneJaCadastrado;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -16,14 +18,30 @@ public class ClienteService {
         this.repository = repository;
     }
 
-    public Cliente salvar(ClienteDTO DTO) {
+    public Cliente salvar(ClienteDTO dto) {
+
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new EmailJaCadastradoException(
+                    "E-mail já cadastrado: " + dto.getEmail()
+            );
+        }
+
+        if (repository.existsByTelefone(dto.getTelefone())) {
+            throw new NumeroDeTelefoneJaCadastrado(
+                    "Número de telefone já cadastrado: " + dto.getTelefone()
+            );
+        }
+
         Cliente cliente = new Cliente();
-        cliente.setNome(DTO.getNome());
-        cliente.setEmail(DTO.getEmail());
-        cliente.setTelefone(DTO.getTelefone());
-        cliente.setEndereco(DTO.getEndereco());
+        cliente.setNome(dto.getNome());
+        cliente.setEmail(dto.getEmail());
+        cliente.setTelefone(dto.getTelefone());
+        cliente.setEndereco(dto.getEndereco());
+
         return repository.save(cliente);
+
     }
+
 
     public List<Cliente> buscarTodos() {
         return repository.findAll();

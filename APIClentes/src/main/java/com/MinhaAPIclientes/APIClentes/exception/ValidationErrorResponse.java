@@ -1,5 +1,6 @@
 package com.MinhaAPIclientes.APIClentes.exception;
 
+import java.beans.XMLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
 
