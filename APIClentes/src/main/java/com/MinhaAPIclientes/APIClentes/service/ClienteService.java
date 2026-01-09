@@ -6,6 +6,9 @@ import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
 import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
 import com.MinhaAPIclientes.APIClentes.exception.EmailJaCadastradoException;
 import com.MinhaAPIclientes.APIClentes.exception.NumeroDeTelefoneJaCadastrado;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -42,10 +45,15 @@ public class ClienteService {
 
     }
 
+/// Pageable = pedido
+///
+/// Page = resposta
+public Page<Cliente> buscarTodosPaginado(int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    return repository.findAll(pageable);
+}
 
-    public List<Cliente> buscarTodos() {
-        return repository.findAll();
-    }
+
 
     public Cliente buscarPorID(Long id) {
         return repository.findById(id)
@@ -65,6 +73,8 @@ public class ClienteService {
             repository.findById(id)
                     .orElseThrow(() -> new ClienteNaoEncontradoException(("Cliente não encontrado com id: " + id + ", não e possivel deletar!")));
            repository.deleteById(id);
+
+
         }
     }
 

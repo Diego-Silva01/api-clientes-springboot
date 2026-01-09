@@ -2,13 +2,11 @@
 
     import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
     import com.MinhaAPIclientes.APIClentes.Model.Cliente;
-    import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
     import com.MinhaAPIclientes.APIClentes.service.ClienteService;
     import jakarta.validation.Valid;
+    import org.springframework.data.domain.Page;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
-
-    import java.util.List;
 
     // @RestController: Sua classe do Controller é anotada com @RestController, indicando que ela lida com requisições web, serializando as respostas para JSON.
     @RestController
@@ -29,12 +27,14 @@
             Cliente clienteSalvo = service.salvar(clienteDTO);
             return ResponseEntity.status(201).body(clienteSalvo);
         }
-        @GetMapping("")
-        public ResponseEntity<List<Cliente>> buscarTodos() {
-            List<Cliente> cliente = service.buscarTodos();
-            return ResponseEntity.status(200).body(cliente);
-            //👉 não retorna só dados, retorna dados + status HTTP correto
+        @GetMapping
+        public ResponseEntity<Page<Cliente>> buscarTodos(
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "0") int size) {
 
+            return ResponseEntity.ok(
+                    service.buscarTodosPaginado(page, size)
+            );
         }
 
         @GetMapping("/{id}")
@@ -56,6 +56,8 @@
             service.deletarUsuario(id);
             return ResponseEntity.noContent().build();
         }
+
+
 
     }
 
