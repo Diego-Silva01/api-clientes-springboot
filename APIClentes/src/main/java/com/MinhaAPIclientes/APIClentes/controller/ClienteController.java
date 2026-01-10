@@ -5,6 +5,7 @@
     import com.MinhaAPIclientes.APIClentes.service.ClienteService;
     import jakarta.validation.Valid;
     import org.springframework.data.domain.Page;
+    import org.springframework.data.domain.Pageable;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +29,10 @@
             return ResponseEntity.status(201).body(clienteSalvo);
         }
         @GetMapping
-        public ResponseEntity<Page<Cliente>> buscarTodos(
-                @RequestParam(defaultValue = "0") int page,
-                @RequestParam(defaultValue = "0") int size) {
-
-            return ResponseEntity.ok(
-                    service.buscarTodosPaginado(page, size)
-            );
+        public ResponseEntity<Page<Cliente>> buscarTodos(Pageable pageable) {
+            return ResponseEntity.ok(service.buscarTodosPaginado(pageable));
         }
+
 
         @GetMapping("/{id}")
         public ResponseEntity<Cliente> buscarporID(@PathVariable("id") Long id) {
@@ -58,10 +55,8 @@
         }
         @GetMapping("/buscar")
         public ResponseEntity<Page<Cliente>> buscarPorNome(@RequestParam @Valid String nome,
-                                                           @RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "5") int size){
-
-            return ResponseEntity.ok(service.buscaPorNome(nome, page, size));
+                                                           Pageable pageable{
+            return ResponseEntity.ok(service.buscaPorNome(nome, pageable));
         }
 
 

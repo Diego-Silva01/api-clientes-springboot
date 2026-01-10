@@ -49,10 +49,10 @@ public class ClienteService {
     /// Pageable = pedido
     ///
     /// Page = resposta
-    public Page<Cliente> buscarTodosPaginado(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<Cliente> buscarTodosPaginado(Pageable pageable) {
         return repository.findAll(pageable);
     }
+
 
 
     public Cliente buscarPorID(Long id) {
@@ -76,17 +76,16 @@ public class ClienteService {
 
 
     }
-    public Page<Cliente> buscaPorNome(String nome, int page, int size) {
+    public Page<Cliente> buscaPorNome(String nome, Pageable pageable) {
+        Page<Cliente> page = repository.findByNomeContaining(nome, pageable);
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Cliente> resultado = repository.findByNomeContaining(nome, pageable);
-
-        if (resultado.isEmpty()) {
-            throw new NomeNaoEncontrdo("Nome não encontrado: " + nome);
+        if (page.isEmpty()) {
+            throw new NomeNaoEncontrdo("Nome: " + nome + " não encontrado");
         }
 
-        return resultado;
+        return page;
     }
+
 
 }
 
