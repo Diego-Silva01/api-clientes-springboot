@@ -5,6 +5,7 @@ import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
 import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
 import com.MinhaAPIclientes.APIClentes.exception.EmailJaCadastradoException;
+import com.MinhaAPIclientes.APIClentes.exception.NomeNaoEncontrdo;
 import com.MinhaAPIclientes.APIClentes.exception.NumeroDeTelefoneJaCadastrado;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,14 +46,13 @@ public class ClienteService {
 
     }
 
-/// Pageable = pedido
-///
-/// Page = resposta
-public Page<Cliente> buscarTodosPaginado(int page, int size) {
-    Pageable pageable = PageRequest.of(page, size);
-    return repository.findAll(pageable);
-}
-
+    /// Pageable = pedido
+    ///
+    /// Page = resposta
+    public Page<Cliente> buscarTodosPaginado(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable);
+    }
 
 
     public Cliente buscarPorID(Long id) {
@@ -69,13 +69,26 @@ public Page<Cliente> buscarTodosPaginado(int page, int size) {
 
     }
 
-        public void deletarUsuario(Long id) {
-            repository.findById(id)
-                    .orElseThrow(() -> new ClienteNaoEncontradoException(("Cliente não encontrado com id: " + id + ", não e possivel deletar!")));
-           repository.deleteById(id);
+    public void deletarUsuario(Long id) {
+        repository.findById(id)
+                .orElseThrow(() -> new ClienteNaoEncontradoException(("Cliente não encontrado com id: " + id + ", não e possivel deletar!")));
+        repository.deleteById(id);
 
 
-        }
     }
+    public Page<Cliente> buscaPorNome(String nome, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Cliente> resultado = repository.findByNomeContaining(nome, pageable);
+
+        if (resultado.isEmpty()) {
+            throw new NomeNaoEncontrdo("Nome não encontrado: " + nome);
+        }
+
+        return resultado;
+    }
+
+}
+
 
 

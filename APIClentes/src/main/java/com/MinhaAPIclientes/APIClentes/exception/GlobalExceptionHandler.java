@@ -51,6 +51,11 @@ public class GlobalExceptionHandler {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
 
     }
+    @ExceptionHandler(NomeNaoEncontrdo.class)
+    public ResponseEntity<ErrorResponse>handleNomeNaoEncontrado(NomeNaoEncontrdo ex){
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(),ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 
 
 

@@ -56,6 +56,13 @@
             service.deletarUsuario(id);
             return ResponseEntity.noContent().build();
         }
+        @GetMapping("/buscar")
+        public ResponseEntity<Page<Cliente>> buscarPorNome(@RequestParam @Valid String nome,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "5") int size){
+
+            return ResponseEntity.ok(service.buscaPorNome(nome, page, size));
+        }
 
 
 
