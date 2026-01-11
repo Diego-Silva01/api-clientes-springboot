@@ -34,7 +34,7 @@ public class ClienteService {
     }
 
 
-    public Cliente salvar(ClienteDTO dto) {
+    public ClienteResponseDTO salvar(ClienteDTO dto) {
 
         if (repository.existsByEmail(dto.getEmail())) {
             throw new EmailJaCadastradoException(
@@ -53,8 +53,9 @@ public class ClienteService {
         cliente.setEmail(dto.getEmail());
         cliente.setTelefone(dto.getTelefone());
         cliente.setEndereco(dto.getEndereco());
+        Cliente clienteSalvo = repository.save(cliente);
 
-        return repository.save(cliente);
+        return toResponseDTO(clienteSalvo);
 
     }
 
@@ -67,18 +68,20 @@ public class ClienteService {
 
 
 
-    public Cliente buscarPorID(Long id) {
-        return repository.findById(id)
+    public ClienteResponseDTO buscarPorID(Long id) {
+        return repository.findById(id).map(this::toResponseDTO)
                 .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com id: " + id));
 
     }
 
-    public Cliente atualizarCliente(Long id, ClienteDTO DTO) {
+    public ClienteResponseDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
         Cliente clientedoBanco = repository.findById(id).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com id: " + id));
-        clientedoBanco.setNome(DTO.getNome());
-        clientedoBanco.setEmail(DTO.getEmail());
-        return repository.save(clientedoBanco);
-
+        clientedoBanco.setNome(clienteDTO.getNome());
+        clientedoBanco.setEmail(clienteDTO.getEmail());
+        clientedoBanco.setTelefone(clienteDTO.getTelefone());
+        clientedoBanco.setEndereco(clienteDTO.getEndereco());
+        Cliente clienteAtualizado = repository.save(clientedoBanco);
+       return toResponseDTO(clientedoBanco);
     }
 
     public void deletarUsuario(Long id) {
@@ -88,14 +91,14 @@ public class ClienteService {
 
 
     }
-    public Page<Cliente> buscaPorNome(String nome, Pageable pageable) {
+    public Page<ClienteResponseDTO> buscaPorNome(String nome, Pageable pageable) {
         Page<Cliente> page = repository.findByNomeContaining(nome, pageable);
 
         if (page.isEmpty()) {
             throw new NomeNaoEncontrdo("Nome: " + nome + " não encontrado");
         }
 
-        return page;
+        return page.map(this::toResponseDTO);
 
     }
 

@@ -25,8 +25,8 @@
     //👉 Não tem @Entity
     //👉 É usado para entrada e/ou saída da API
         @PostMapping("")
-        public ResponseEntity<Cliente> salvar(@RequestBody ClienteDTO clienteDTO) {
-            Cliente clienteSalvo = service.salvar(clienteDTO);
+        public ResponseEntity<ClienteResponseDTO> salvar(@RequestBody ClienteDTO clienteDTO) {
+            ClienteResponseDTO clienteSalvo = service.salvar(clienteDTO);
             return ResponseEntity.status(201).body(clienteSalvo);
         }
         @GetMapping
@@ -36,16 +36,16 @@
 
 
         @GetMapping("/{id}")
-        public ResponseEntity<Cliente> buscarporID(@PathVariable("id") Long id) {
+        public ResponseEntity<ClienteResponseDTO> buscarporID(@PathVariable("id") Long id) {
 
-            Cliente cliente = service.buscarPorID(id);
+            ClienteResponseDTO cliente = service.buscarPorID(id);
             return ResponseEntity.ok(cliente);
 
 
         }
         @PutMapping("/{id}")
-        public ResponseEntity<Cliente> atualizarCliente(@PathVariable("id") Long id,@Valid @RequestBody ClienteDTO DTO ) {
-            Cliente clienteAtualizado = service.atualizarCliente(id, DTO);
+        public ResponseEntity<ClienteResponseDTO> atualizarCliente(@PathVariable("id") Long id,@Valid @RequestBody ClienteDTO DTO ) {
+            ClienteResponseDTO clienteAtualizado = service.atualizarCliente(id, DTO);
             return ResponseEntity.ok(clienteAtualizado);
 
         }
@@ -55,7 +55,7 @@
             return ResponseEntity.noContent().build();
         }
         @GetMapping("/buscar")
-        public ResponseEntity<Page<Cliente>> buscarPorNome(@RequestParam @Valid String nome,
+        public ResponseEntity<Page<ClienteResponseDTO>> buscarPorNome(@RequestParam @Valid String nome,
                                                            Pageable pageable){
             return ResponseEntity.ok(service.buscaPorNome(nome, pageable));
         }
