@@ -1,6 +1,7 @@
     package com.MinhaAPIclientes.APIClentes.controller;
 
     import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
+    import com.MinhaAPIclientes.APIClentes.DTO.ClienteResponseDTO;
     import com.MinhaAPIclientes.APIClentes.Model.Cliente;
     import com.MinhaAPIclientes.APIClentes.service.ClienteService;
     import jakarta.validation.Valid;
@@ -9,7 +10,7 @@
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
-    // @RestController: Sua classe do Controller é anotada com @RestController, indicando que ela lida com requisições web, serializando as respostas para JSON.
+    // @RestController: su classe do Controller é anotada com @RestController, indicando que ela lida com requisições web, serializando as respostas para JSON.
     @RestController
     @RequestMapping("/clientes")
     public class ClienteController {
@@ -29,7 +30,7 @@
             return ResponseEntity.status(201).body(clienteSalvo);
         }
         @GetMapping
-        public ResponseEntity<Page<Cliente>> buscarTodos(Pageable pageable) {
+        public ResponseEntity<Page<ClienteResponseDTO>> buscarTodos(Pageable pageable) {
             return ResponseEntity.ok(service.buscarTodosPaginado(pageable));
         }
 
@@ -55,7 +56,7 @@
         }
         @GetMapping("/buscar")
         public ResponseEntity<Page<Cliente>> buscarPorNome(@RequestParam @Valid String nome,
-                                                           Pageable pageable{
+                                                           Pageable pageable){
             return ResponseEntity.ok(service.buscaPorNome(nome, pageable));
         }
 
