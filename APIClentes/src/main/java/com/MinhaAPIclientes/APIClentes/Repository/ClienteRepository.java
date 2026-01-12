@@ -10,5 +10,7 @@ boolean existsByEmail(String email);
 boolean existsByTelefone(String telefone);
     Page<Cliente> findByNomeContaining(String nome, Pageable pageable);
     boolean existsByNomeContaining(String nome);
+    Page<Cliente> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
+
 
 }

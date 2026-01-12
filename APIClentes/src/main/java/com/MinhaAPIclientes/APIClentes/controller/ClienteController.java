@@ -30,8 +30,9 @@
             return ResponseEntity.status(201).body(clienteSalvo);
         }
         @GetMapping
-        public ResponseEntity<Page<ClienteResponseDTO>> buscarTodos(Pageable pageable) {
-            return ResponseEntity.ok(service.buscarTodosPaginado(pageable));
+        public ResponseEntity<Page<ClienteResponseDTO>> buscarTodos(Pageable pageable,
+                                                                    @RequestParam(required = false) String nome) {
+            return ResponseEntity.ok(service.buscarTodosPaginado(pageable, nome));
         }
 
 

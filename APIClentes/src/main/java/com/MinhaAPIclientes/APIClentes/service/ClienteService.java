@@ -62,10 +62,17 @@ public class ClienteService {
     /// Pageable = pedido
     ///
     /// Page = resposta
-    public Page<ClienteResponseDTO> buscarTodosPaginado(Pageable pageable) {
-        return repository.findAll(pageable).map(this::toResponseDTO);
-    }
+    public Page<ClienteResponseDTO> buscarTodosPaginado(Pageable pageable, String nome) {
+        Page<Cliente> page;
+        if (nome == null || nome.isBlank()) {
+            page = repository.findAll(pageable);
 
+        } else {
+            page = repository.findByNomeContainingIgnoreCase(nome, pageable);
+
+        }
+        return page.map(this::toResponseDTO);
+    }
 
 
     public ClienteResponseDTO buscarPorID(Long id) {
@@ -81,7 +88,7 @@ public class ClienteService {
         clientedoBanco.setTelefone(clienteDTO.getTelefone());
         clientedoBanco.setEndereco(clienteDTO.getEndereco());
         Cliente clienteAtualizado = repository.save(clientedoBanco);
-       return toResponseDTO(clientedoBanco);
+       return toResponseDTO(clienteAtualizado);
     }
 
     public void deletarUsuario(Long id) {
@@ -93,11 +100,9 @@ public class ClienteService {
     }
     public Page<ClienteResponseDTO> buscaPorNome(String nome, Pageable pageable) {
         Page<Cliente> page = repository.findByNomeContaining(nome, pageable);
-
         if (page.isEmpty()) {
             throw new NomeNaoEncontrdo("Nome: " + nome + " não encontrado");
         }
-
         return page.map(this::toResponseDTO);
 
     }
