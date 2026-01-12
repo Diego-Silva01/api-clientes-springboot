@@ -34,25 +34,25 @@ public class ClienteService {
     }
 
 
-    public ClienteResponseDTO salvar(ClienteDTO dto) {
+    public ClienteResponseDTO salvar(ClienteDTO clienteDTO) {
 
-        if (repository.existsByEmail(dto.getEmail())) {
+        if (repository.existsByEmail(clienteDTO.getEmail())) {
             throw new EmailJaCadastradoException(
-                    "E-mail já cadastrado: " + dto.getEmail()
+                    "E-mail já cadastrado: " + clienteDTO.getEmail()
             );
         }
 
-        if (repository.existsByTelefone(dto.getTelefone())) {
+        if (repository.existsByTelefone(clienteDTO.getTelefone())) {
             throw new NumeroDeTelefoneJaCadastrado(
-                    "Número de telefone já cadastrado: " + dto.getTelefone()
+                    "Número de telefone já cadastrado: " + clienteDTO.getTelefone()
             );
         }
 
         Cliente cliente = new Cliente();
-        cliente.setNome(dto.getNome());
-        cliente.setEmail(dto.getEmail());
-        cliente.setTelefone(dto.getTelefone());
-        cliente.setEndereco(dto.getEndereco());
+        cliente.setNome(clienteDTO.getNome());
+        cliente.setEmail(clienteDTO.getEmail());
+        cliente.setTelefone(clienteDTO.getTelefone());
+        cliente.setEndereco(clienteDTO.getEndereco());
         Cliente clienteSalvo = repository.save(cliente);
 
         return toResponseDTO(clienteSalvo);
@@ -80,16 +80,46 @@ public class ClienteService {
                 .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com id: " + id));
 
     }
-
     public ClienteResponseDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
-        Cliente clientedoBanco = repository.findById(id).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com id: " + id));
-        clientedoBanco.setNome(clienteDTO.getNome());
-        clientedoBanco.setEmail(clienteDTO.getEmail());
-        clientedoBanco.setTelefone(clienteDTO.getTelefone());
-        clientedoBanco.setEndereco(clienteDTO.getEndereco());
-        Cliente clienteAtualizado = repository.save(clientedoBanco);
-       return toResponseDTO(clienteAtualizado);
+
+        Cliente clienteDoBanco = repository.findById(id)
+                .orElseThrow(() ->
+                        new ClienteNaoEncontradoException(
+                                "Cliente não encontrado com id: " + id
+                        )
+                );
+        if (clienteDTO.getNome() != null) {
+            clienteDoBanco.setNome(clienteDTO.getNome());
+        }
+
+        if (clienteDTO.getEndereco() != null) {
+            clienteDoBanco.setEndereco(clienteDTO.getEndereco());
+        }
+
+
+        if (clienteDTO.getEmail() != null && !clienteDoBanco.getEmail().equals(clienteDTO.getEmail())) {
+            if (repository.existsByEmail(clienteDTO.getEmail())) {
+                throw new EmailJaCadastradoException(
+                        "E-mail já cadastrado: " + clienteDTO.getEmail()
+                );
+            }
+            clienteDoBanco.setEmail(clienteDTO.getEmail());
+        }
+
+        if (clienteDTO.getTelefone() != null && !clienteDoBanco.getTelefone().equals(clienteDTO.getTelefone())) {
+            if (repository.existsByTelefone(clienteDTO.getTelefone())) {
+                throw new NumeroDeTelefoneJaCadastrado(
+                        "Número de telefone já cadastrado: " + clienteDTO.getTelefone()
+                );
+            }
+            clienteDoBanco.setTelefone(clienteDTO.getTelefone());
+        }
+
+        Cliente clienteAtualizado = repository.save(clienteDoBanco);
+        return toResponseDTO(clienteAtualizado);
     }
+
+
 
     public void deletarUsuario(Long id) {
         repository.findById(id)
