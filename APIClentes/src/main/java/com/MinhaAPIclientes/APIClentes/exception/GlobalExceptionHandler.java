@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.NOT_FOUND, ex.getMessage(), request);
     }
 
-    //  EMAIL JÁ CADASTRADO
+
     @ExceptionHandler(EmailJaCadastradoException.class)
     public ResponseEntity<ErroResponseDTO> handleEmailJaCadastrado(
             EmailJaCadastradoException ex,
@@ -47,7 +47,6 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
-    //  TELEFONE JÁ CADASTRADO
     @ExceptionHandler(NumeroDeTelefoneJaCadastrado.class)
     public ResponseEntity<ErroResponseDTO> handleTelefoneJaCadastrado(
             NumeroDeTelefoneJaCadastrado ex,
@@ -56,7 +55,7 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
-    //  NOME NÃO ENCONTRADO
+
     @ExceptionHandler(NomeNaoEncontrdo.class)
     public ResponseEntity<ErroResponseDTO> handleNomeNaoEncontrado(
             NomeNaoEncontrdo ex,

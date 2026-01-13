@@ -74,14 +74,12 @@ public class ClienteService {
         return page.map(this::toResponseDTO);
     }
 
-
     public ClienteResponseDTO buscarPorID(Long id) {
         return repository.findById(id).map(this::toResponseDTO)
                 .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado com id: " + id));
 
     }
     public ClienteResponseDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
-
         Cliente clienteDoBanco = repository.findById(id)
                 .orElseThrow(() ->
                         new ClienteNaoEncontradoException(
