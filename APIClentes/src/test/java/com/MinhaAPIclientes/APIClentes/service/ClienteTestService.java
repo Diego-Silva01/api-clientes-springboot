@@ -26,7 +26,6 @@ class ClienteServiceTest {
     @InjectMocks
     ClienteService service;
 
-    /* ===================== TESTE SALVAR ===================== */
 
     @Test
     void deveSalvarClienteComSucesso() {
@@ -55,7 +54,7 @@ class ClienteServiceTest {
         assertEquals("Diego", response.nome());
     }
 
-    /* ===================== TESTE BUSCAR POR ID ===================== */
+
 
     @Test
     void deveBuscarClientePorIdComSucesso() {
@@ -81,7 +80,7 @@ class ClienteServiceTest {
                 () -> service.buscarPorID(1L));
     }
 
-    /* ===================== TESTE BUSCAR PAGINADO ===================== */
+
 
     @Test
     void deveBuscarClientesPaginados() {
@@ -102,7 +101,7 @@ class ClienteServiceTest {
         assertEquals("Diego", response.getContent().get(0).nome());
     }
 
-    /* ===================== TESTE DELETAR ===================== */
+
 
     @Test
     void deveDeletarClienteComSucesso() {

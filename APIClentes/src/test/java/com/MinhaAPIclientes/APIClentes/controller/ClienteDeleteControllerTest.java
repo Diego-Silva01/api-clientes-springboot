@@ -32,6 +32,7 @@ public class ClienteDeleteControllerTest {
 mockMvc.perform(delete("/clientes/1"))
         .andExpect(status().isNoContent());
 
+
     }
 
 }
