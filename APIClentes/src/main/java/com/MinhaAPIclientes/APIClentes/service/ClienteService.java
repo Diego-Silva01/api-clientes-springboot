@@ -94,7 +94,6 @@ public class ClienteService {
             clienteDoBanco.setEndereco(clienteDTO.getEndereco());
         }
 
-
         if (clienteDTO.getEmail() != null && !clienteDoBanco.getEmail().equals(clienteDTO.getEmail())) {
             if (repository.existsByEmail(clienteDTO.getEmail())) {
                 throw new EmailJaCadastradoException(

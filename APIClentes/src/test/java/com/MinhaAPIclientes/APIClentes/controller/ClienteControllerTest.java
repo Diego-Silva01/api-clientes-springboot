@@ -2,6 +2,7 @@ package com.MinhaAPIclientes.APIClentes.controller;
 
 import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
 import com.MinhaAPIclientes.APIClentes.DTO.ClienteResponseDTO;
+import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.service.ClienteService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -83,7 +84,6 @@ public class ClienteControllerTest {
             ClienteResponseDTO response = new ClienteResponseDTO(1L, "Diego", "diego@email.com", "123", "iuiu");
 
             when(service.atualizarCliente(anyLong(), any(ClienteDTO.class))).thenReturn(response);
-
             String jsonCorreto = "{\"nome\": \"Diego\", \"email\": \"diego@email.com\", \"telefone\": \"123\", \"endereco\": \"iuiu\"}";
 
             mockMvc.perform(put("/clientes/1")
@@ -93,4 +93,26 @@ public class ClienteControllerTest {
                     .andExpect(jsonPath("$.nome").value("Diego"));
         }
     }
+
+    @DisplayName("Teste de criação")
+    @Test
+    void deveCriarClienteComSucesso() throws Exception{
+
+        ClienteResponseDTO response = new ClienteResponseDTO(1L, "Diego", "diegoff@gmail.com", "1234", "iuiu");
+
+        when(service.salvar(any(ClienteDTO.class))).thenReturn(response);
+        String jsonCorreto = "{\"nome\": \"Diego\", \"email\": \"diegoff@gmail.com\", \"telefone\": \"1234\", \"endereco\": \"iuiu\"}";
+
+
+        mockMvc.perform(post("/clientes").contentType(MediaType.APPLICATION_JSON).content(jsonCorreto))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.nome").value("Diego"))
+                        .andExpect(jsonPath("$.email").value("diegoff@gmail.com"))
+                                .andExpect(jsonPath("$.telefone").value("1234"))
+                                        .andExpect(jsonPath("$.endereco").value("iuiu"));
+
+
+    }
+
 }
