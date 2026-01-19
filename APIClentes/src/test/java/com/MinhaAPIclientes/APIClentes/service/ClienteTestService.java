@@ -4,6 +4,7 @@ import com.MinhaAPIclientes.APIClentes.DTO.ClienteDTO;
 import com.MinhaAPIclientes.APIClentes.DTO.ClienteResponseDTO;
 import com.MinhaAPIclientes.APIClentes.Model.Cliente;
 import com.MinhaAPIclientes.APIClentes.Repository.ClienteRepository;
+import com.MinhaAPIclientes.APIClentes.exception.ClienteNaoEncontradoException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -73,10 +74,10 @@ class ClienteServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoClienteNaoEncontrado() {
+    void LancarExcecaoQuandoClienteNaoEncontrado(){
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class,
+        assertThrows(ClienteNaoEncontradoException.class,
                 () -> service.buscarPorID(1L));
     }
 
@@ -105,6 +106,7 @@ class ClienteServiceTest {
 
     @Test
     void deveDeletarClienteComSucesso() {
+
         Cliente cliente = new Cliente();
         cliente.setId(1L);
 
@@ -112,7 +114,11 @@ class ClienteServiceTest {
 
         assertDoesNotThrow(() -> service.deletarUsuario(1L));
 
-        verify(repository).delete(cliente);
+        verify(repository).deleteById(1L);
     }
+
+
+
+
 }
 
