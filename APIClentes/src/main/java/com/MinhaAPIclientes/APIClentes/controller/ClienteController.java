@@ -82,7 +82,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
                 schema = @Schema(implementation = ErroResponseDTO.class)
 
         ))
-
 })
         @GetMapping("/{id}")
         public ResponseEntity<ClienteResponseDTO> buscarporID(
@@ -94,23 +93,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 
         }
-        @Operation(summary = "Atualizar cliente")
+        @Operation(
+                summary = "Atualizar cliente",
+                description = "Atualiza os dados de um cliente existente pelo ID"
+        )
         @ApiResponses({
                 @ApiResponse(
                         responseCode = "200",
                         description = "Cliente atualizado com sucesso",
                         content = @Content(
+                                mediaType = "application/json",
                                 schema = @Schema(implementation = ClienteResponseDTO.class),
                                 examples = @ExampleObject(
+                                        name = "Exemplo de sucesso",
                                         value = """
-                                                {
-                                                "id": 1,
-                                                "nome": "Diego Silva,
-                                                "email": "diego@gmail.com",
-                                                "telefone": "123456789,
-                                                "endereco": "Iuiu-Bahia"
-                                                }
-                                                """
+                                {
+                                  "id": 1,
+                                  "nome": "Diego Silva",
+                                  "email": "diego@gmail.com",
+                                  "telefone": "123456789",
+                                  "endereco": "Iuiu-Bahia"
+                                }
+                                """
                                 )
                         )
                 ),
@@ -125,42 +129,38 @@ import io.swagger.v3.oas.annotations.media.Schema;
                         responseCode = "404",
                         description = "Cliente não encontrado",
                         content = @Content(
-                                schema = @Schema(implementation = ErroResponseDTO.class),examples = @ExampleObject(
-                                value = """
-                                                {
-                                                "id": 1,
-                                                "nome": "Diego Silva,
-                                                "email": "diego@gmail.com",
-                                                "telefone": "123456789,
-                                                "endereco": "Iuiu-Bahia"
-                                                }
-                                                """
-                        )
-
+                                schema = @Schema(implementation = ErroResponseDTO.class),
+                                examples = @ExampleObject(
+                                        value = """
+                                {
+                                  "status": 404,
+                                  "message": "Cliente não encontrado com id: 99",
+                                  "path": "/clientes/99",
+                                  "timestamp": "2026-01-20T10:30:00"
+                                }
+                                """
+                                )
                         )
                 ),
                 @ApiResponse(
                         responseCode = "409",
                         description = "E-mail ou telefone já cadastrado",
                         content = @Content(
-                                schema = @Schema(implementation = ErroResponseDTO.class),
-                                examples = @ExampleObject(  value = """
-            {
-              "status": 404,
-              "message": "Cliente não encontrado com id: 99",
-              "path": "/clientes/99",
-              "timestamp": "2026-01-20T10:30:00"
-            }
-            """)))
+                                schema = @Schema(implementation = ErroResponseDTO.class)
 
+                        )
+                )
         })
         @PutMapping("/{id}")
         public ResponseEntity<ClienteResponseDTO> atualizarCliente(
+                @Parameter(description = "ID do cliente", example = "1")
                 @PathVariable Long id,
+
                 @RequestBody @Valid ClienteDTO dto
         ) {
             return ResponseEntity.ok(service.atualizarCliente(id, dto));
         }
+
 
         @Operation(summary = "Deletar cliente")
         @ApiResponses({
@@ -169,7 +169,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
                         responseCode = "404",
                         description = "Cliente não encontrado",
                         content = @Content(
-                                schema = @Schema(implementation = ErroResponseDTO.class)
+                                schema = @Schema(implementation = ErroResponseDTO.class),
+                                examples = @ExampleObject(
+                                        value = """
+                                {
+                                  "status": 404,
+                                  "message": "Cliente não encontrado com id: 99",
+                                  "path": "/clientes/99",
+                                  "timestamp": "2026-01-20T10:30:00"
+                                }
+                                """
+                                )
                         )
                 )
         })
@@ -179,7 +189,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
             service.deletarUsuario(id);
         }
 
+@Operation(summary= "Busca por filtros",
+description = "Busca por resultados com filtros de nome, ordem, size e page")
+@ApiResponses(
+        @ApiResponse(responseCode = "404", description = "Cliente nao encontrado",
+        content = @Content(
+                schema = @Schema(
+                        implementation =ErroResponseDTO.class
+                )
 
+        ))
+
+
+)
         @GetMapping("/buscar")
         public ResponseEntity<Page<ClienteResponseDTO>> buscarPorNome(@RequestParam @Valid String nome,
                                                            Pageable pageable){
