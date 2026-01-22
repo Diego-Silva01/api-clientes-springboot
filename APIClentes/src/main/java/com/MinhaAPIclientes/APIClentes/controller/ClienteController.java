@@ -29,14 +29,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
         public ClienteController(ClienteService service) {
             this.service = service;
         }
-    // DTO = Data Transfer Object
-    //👉 Serve somente para transportar dados
-    //👉 Não representa o banco
-    //👉 Não tem @Entity
-    //👉 É usado para entrada e/ou saída da API
+
         @Operation(
                 summary = "Cadastrar cliente",
-                description = "Criarum novo cliente so sistema com nome, email, telefone e endereço"
+                description = "Criar um novo cliente no sistema com nome, email, telefone e endereço"
         )
         @ApiResponses({
                 @ApiResponse(responseCode = "201", description = "Cliente cadastrado com sucesso"),
@@ -199,17 +195,12 @@ description = "Busca por resultados com filtros de nome, ordem, size e page")
                 )
 
         ))
-
-
 )
         @GetMapping("/buscar")
         public ResponseEntity<Page<ClienteResponseDTO>> buscarPorNome(@RequestParam @Valid String nome,
                                                            Pageable pageable){
             return ResponseEntity.ok(service.buscaPorNome(nome, pageable));
         }
-
-
-
     }
 
 

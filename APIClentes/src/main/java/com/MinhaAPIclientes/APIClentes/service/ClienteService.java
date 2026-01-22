@@ -58,10 +58,6 @@ public class ClienteService {
         return toResponseDTO(clienteSalvo);
 
     }
-
-    /// Pageable = pedido
-    ///
-    /// Page = resposta
     public Page<ClienteResponseDTO> buscarTodosPaginado(Pageable pageable, String nome) {
         Page<Cliente> page;
         if (nome == null || nome.isBlank()) {
